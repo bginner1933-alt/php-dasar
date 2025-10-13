@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    Selamat Datang Di ASSADIG (Assalam Digital)
+                    Selamat Datang Di ASSADIG (Assalaam Digital)
                 </div>
             </div>
         </div>

@@ -1,21 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MyController; // controlle harus di import / di panggil
+use App\Http\Controllers\MyController; // Controlle harus di import / di panggil
 use App\Http\Controllers\PostController;
-
+use App\Http\Controllers\BiodataController;
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('test-model',function(){
-    // menampilkan semua data dari mdel post
+    // Menampilkan semua data dari mdel post
     $data = App\Models\Post::all();
     return $data;
 });
 
 Route::get('create-data',function(){
-    //membuat data baru melalui model
+    // Membuat data baru melalui model
     $data = App\Models\Post::create([
         'title'=>'Belajar PHP',
         'content'=>'Lorem Ipsum'
@@ -55,10 +55,27 @@ Route::get('search/{cari}', function($query){
 Route::get('greetings',[MyController::class, 'hello']);
 Route::get('student',[MyController::class, 'siswa']);
 
-
-// post
-Route::get('post', [PostController::class, 'index']);
-
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Post
+Route::get('post', [PostController::class, 'index'])->name('post.index');
+Route::get('post/create', [PostController::class, 'create'])->name('post.create');
+Route::post('post', [PostController::class, 'store'])->name('post.store');
+// Edit data post
+Route::get('post/{id}/edit', [PostController::class, 'edit'])->name('post.edit');
+Route::put('post/{id}', [PostController::class, 'update'])->name('post.update');
+
+// Show data
+Route::get('post/{id}/edit', [PostController::class, 'show'])->name('post.show');
+
+Route::resource('produk', App\Http\Controllers\ProdukController::class)->middleware('auth');
+
+
+Route::resource('biodata', BiodataController::class);
+
+
+
+// Hapus data
+Route::delete('post/{id}', [PostController::class, 'destroy'])->name('post.delete');
