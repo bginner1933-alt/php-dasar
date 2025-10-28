@@ -5,7 +5,8 @@
         <div class="col">
             <fieldset>
                 <legend>Tambah Data Post</legend>
-                <form action="{{ route('post.update') }}" method="post">
+                <form action="{{ route('post.update', $post->id) }}" method="POST">
+
                     @csrf
                     @method('PUT')
                     <div class="mb-3">

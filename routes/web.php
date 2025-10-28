@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MyController; // Controlle harus di import / di panggil
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\BiodataController;
+use App\Http\Controllers\RelasiController;
+use App\Models\Hobi;
+use App\Http\Controllers\DosenController;
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -50,6 +55,14 @@ Route::get('search/{cari}', function($query){
     return $data;
 });
 
+// routes/web.php
+use App\Models\Wali;
+
+Route::get('/wali-ke-mahasiswa', function () {
+    $wali = Wali::with('mahasiswa')->first();
+    return "{$wali->nama} adalah wali dari {$wali->mahasiswa->nama}";
+});
+
 // Pemanggil url menggunakan controller
 
 Route::get('greetings',[MyController::class, 'hello']);
@@ -68,12 +81,41 @@ Route::get('post/{id}/edit', [PostController::class, 'edit'])->name('post.edit')
 Route::put('post/{id}', [PostController::class, 'update'])->name('post.update');
 
 // Show data
-Route::get('post/{id}/edit', [PostController::class, 'show'])->name('post.show');
+Route::get('post/{id}', [PostController::class, 'show'])->name('post.show');
 
 Route::resource('produk', App\Http\Controllers\ProdukController::class)->middleware('auth');
 
 
 Route::resource('biodata', BiodataController::class);
+
+// routes/web.php
+
+
+Route::get('/one-to-one', [RelasiController::class, 'index']);
+
+
+
+Route::get('/one-to-many', [RelasiController::class, 'oneToMany']);
+
+Route::get('/many-to-many', [RelasiController::class, 'manyToMany']);
+// routes/web.php
+
+
+Route::get('/hobi/bola', function () {
+    $hobi = Hobi::where('nama_hobi', 'Bermain Bola')->first();
+    foreach ($hobi->mahasiswas as $mhs) {
+        echo $mhs->nama . '<br>';
+    }
+});
+
+
+
+Route::resource('dosen', DosenController::class);
+
+
+Route::get('eloquent', [RelasiController::class, 'eloquent']);
+
+Route::resource('mahasiswa', App\Http\Controllers\MahasiswaController::class);
 
 
 

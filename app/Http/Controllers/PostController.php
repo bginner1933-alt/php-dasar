@@ -66,7 +66,7 @@ class PostController extends Controller
             $post->content = $request->content;
             $post->save(); //Disimpan ke db
             // Di alihkan ke halaman post melalui route post.index
-            return redict()->route('post.index');
+            return redirect()->route('post.index');
         }
 
         public function destroy($id)
