@@ -19,7 +19,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>NO</th>
+                                    <th>No</th>
                                     <th>Nama Mahasiswa</th>
                                     <th>No Induk Mahasiswa</th>
                                     <th>Nama Dosen</th>
@@ -28,29 +28,29 @@
                             </thead>
                             <tbody>
                                 @php $no = 1; @endphp
-                                @forelse ($mahasiswa as $data)
+                                @forelse ($mahasiswas as $data)
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $data->nama }}</td>
                                     <td>{{ $data->nim }}</td>
-                                    <td>{{ $data->dosen->nama }}</td>
+                                    <td>{{ $data->dosen->nama}}</td>
                                     <td>
                                         <form action="{{ route('mahasiswa.destroy', $data->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <a href="{{ route('mahasiswa.show', $data->id) }}"
-                                                class="btn btn-sm btn-outline-dark">Show</a>
+                                                class="btn btn-sm btn-outline-dark">Show</a> |
                                             <a href="{{ route('mahasiswa.edit', $data->id) }}"
-                                                class="btn btn-sm btn-outline-success">Edit</a>
+                                                class="btn btn-sm btn-outline-success">Edit</a> |
                                             <button type="submit" onsubmit="return confirm('Are You Sure ?');"
-                                            class="btn btn-sm btn-outline-danger">Delete</button>
+                                                class="btn btn-sm btn-outline-danger">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
                                     <td colspan="6" class="text-center">
-                                        Data data belum tersedia.
+                                        Data data belum Tersedia.
                                     </td>
                                 </tr>
                                 @endforelse

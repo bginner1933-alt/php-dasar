@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('mahasiswas', function (Blueprint $table) {
             $table->unsignedBigInteger('id_dosen')->nullable();
-            $table->foreign('id_dosen')->references('id')->on('dosens')
-                    ->onDelete('set null');
+            $table->foreign('id_dosen')->references('id')->on('dosens')->onDelete('set null');
+
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('mahasiswas', function (Blueprint $table) {
-            //
+            $table->dropColumn('id_dosen');
         });
     }
 };

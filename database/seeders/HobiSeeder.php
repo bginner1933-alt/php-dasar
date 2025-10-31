@@ -1,17 +1,17 @@
 <?php
-
-// database/seeders/HobiSeeder.php
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Mahasiswa;
 use App\Models\Hobi;
+use App\Models\Mahasiswa;
+use Illuminate\Database\Seeder;
 
 class HobiSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
     {
-        // Buat beberapa hobi
         $hobi1 = Hobi::create(['nama_hobi' => 'Membaca Buku']);
         $hobi2 = Hobi::create(['nama_hobi' => 'Bermain Bola']);
         $hobi3 = Hobi::create(['nama_hobi' => 'Bernyanyi']);
@@ -28,4 +28,3 @@ class HobiSeeder extends Seeder
         }
     }
 }
-

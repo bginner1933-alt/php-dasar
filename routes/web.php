@@ -7,7 +7,8 @@ use App\Http\Controllers\BiodataController;
 use App\Http\Controllers\RelasiController;
 use App\Models\Hobi;
 use App\Http\Controllers\DosenController;
-
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\ProdukController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -117,7 +118,9 @@ Route::get('eloquent', [RelasiController::class, 'eloquent']);
 
 Route::resource('mahasiswa', App\Http\Controllers\MahasiswaController::class);
 
+Route::resource('pelanggan', PelangganController::class);
 
+Route::resource('produk', ProdukController::class);
 
 // Hapus data
 Route::delete('post/{id}', [PostController::class, 'destroy'])->name('post.delete');

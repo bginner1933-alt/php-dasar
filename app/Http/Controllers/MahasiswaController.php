@@ -1,38 +1,44 @@
 <?php
-
 namespace App\Http\Controllers;
+
+use App\Models\Dosen;
+use App\Models\Hobi;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
-use App\Models\Dosen;
 
 class MahasiswaController extends Controller
 {
+
     public function index()
     {
-        $mahasiswa = Mahasiswa::latest()->get();
-        return view('mahasiswa.index', compact('mahasiswa'));
+        $mahasiswas = Mahasiswa::latest()->get();
+        return view('mahasiswa.index', compact('mahasiswas'));
     }
 
     public function create()
     {
         $dosen = Dosen::all();
-        return view('mahasiswa.create', compact('dosen'));
+        $hobi  = Hobi::all();
+        return view('mahasiswa.create', compact('dosen', 'hobi'));
     }
 
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'nama' => 'required',
-            'nim' => 'required|unique:mahasiswas',
+        $validated = $request->validate([
+            'nama'     => 'required',
+            'nim'      => 'required|unique:mahasiswas',
             'id_dosen' => 'required|exists:dosens,id',
         ]);
 
-        $mahasiswa = new Mahasiswa();
-        $mahasiswa->nama = $request->nama;
-        $mahasiswa->nim = $request->nim;
+        $mahasiswa           = new Mahasiswa();
+        $mahasiswa->nama     = $request->nama;
+        $mahasiswa->nim      = $request->nim;
         $mahasiswa->id_dosen = $request->id_dosen;
         $mahasiswa->save();
+        // attach (melampirkan banyak data atau many to many)
+        $mahasiswa->hobis()->attach($request->hobi);
         return redirect()->route('mahasiswa.index');
+
     }
 
     public function show(string $id)
@@ -44,30 +50,38 @@ class MahasiswaController extends Controller
     public function edit(string $id)
     {
         $mahasiswa = Mahasiswa::findOrFail($id);
-        $dosen = Dosen::all();
-        return view('mahasiswa.edit', compact('mahasiswa', 'dosen'));
+        $dosen     = Dosen::all();
+        $hobi      = Hobi::all();
+        return view('mahasiswa.edit', compact('mahasiswa', 'dosen', 'hobi'));
     }
 
     public function update(Request $request, string $id)
     {
-        $validate = $request->validate([
-            'nama' => 'required',
-            'nim'  => 'required|unique:mahasiswas',
+        $validated = $request->validate([
+            'nama'     => 'required',
+            'nim'      => 'required|',
             'id_dosen' => 'required|exists:dosens,id',
         ]);
 
-        $mahasiswa = Mahasiswa::findOrFail($id);
-        $mahasiswa->nama = $request->nama;
-        $mahasiswa->nim = $request->nim;
+        $mahasiswa           = Mahasiswa::findOrFail($id);
+        $mahasiswa->nama     = $request->nama;
+        $mahasiswa->nim      = $request->nim;
         $mahasiswa->id_dosen = $request->id_dosen;
         $mahasiswa->save();
+        // sync (memperbarui data yang diubah dari many to many)
+        $mahasiswa->hobis()->sync($request->hobi);
+
         return redirect()->route('mahasiswa.index');
     }
 
     public function destroy(string $id)
     {
         $mahasiswa = Mahasiswa::findOrFail($id);
+        // detach (menghapus data yang terkait dari mahasiswa dan hobi)
+        // menghapu data di relasi table pivot
+        $mahasiswa->hobis()->detach();
         $mahasiswa->delete();
         return redirect()->route('mahasiswa.index');
+
     }
 }
