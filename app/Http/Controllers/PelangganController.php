@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 
 class PelangganController extends Controller
 {
+
     public function index()
     {
-        $pelanggans = Pelanggan::all();
-        return view('pelanggan.index', compact('pelanggans'));
+        $pelanggan = Pelanggan::all();
+        return view('pelanggan.index', compact('pelanggan'));
     }
 
     public function create()
@@ -17,79 +18,65 @@ class PelangganController extends Controller
         return view('pelanggan.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'alamat' => 'nullable|string|max:255',
-            'no_hp' => 'nullable|string',
+        $validated = $request->validate([
+            'nama'       => 'required',
+            'alamat'     => 'required',
+            'no_telepon' => 'required',
         ]);
 
-        $no_hp = $this->formatNoHp($request->no_hp);
+        $pelanggan             = new Pelanggan();
+        $pelanggan->nama       = $request->nama;
+        $pelanggan->alamat     = $request->alamat;
+        $pelanggan->no_telepon = $request->no_telepon;
+        $pelanggan->save();
 
-        Pelanggan::create([
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'no_hp' => $no_hp,
-        ]);
-
-        return redirect()->route('pelanggan.index')->with('success', 'Pelanggan berhasil ditambahkan!');
+        return redirect()->route('pelanggan.index');
     }
 
-    public function show(Pelanggan $pelanggan)
+    public function show(string $id)
     {
+        $pelanggan = Pelanggan::findOrFail($id);
         return view('pelanggan.show', compact('pelanggan'));
     }
 
-    public function edit(Pelanggan $pelanggan)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
     {
+        $pelanggan = Pelanggan::findOrFail($id);
         return view('pelanggan.edit', compact('pelanggan'));
     }
 
-    public function update(Request $request, Pelanggan $pelanggan)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'alamat' => 'nullable|string|max:255',
-            'no_hp' => 'nullable|string',
+        $validated = $request->validate([
+            'nama'       => 'required',
+            'alamat'     => 'required',
+            'no_telepon' => 'required',
         ]);
 
-        $no_hp = $this->formatNoHp($request->no_hp);
+        $pelanggan             = Pelanggan::findOrFail($id);
+        $pelanggan->nama       = $request->nama;
+        $pelanggan->alamat     = $request->alamat;
+        $pelanggan->no_telepon = $request->no_telepon;
+        $pelanggan->save();
 
-        $pelanggan->update([
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'no_hp' => $no_hp,
-        ]);
-
-        return redirect()->route('pelanggan.index')->with('success', 'Pelanggan berhasil diupdate!');
+        return redirect()->route('pelanggan.index');
     }
 
-    public function destroy(Pelanggan $pelanggan)
+    public function destroy(string $id)
     {
+        $pelanggan = Pelanggan::findOrFail($id);
         $pelanggan->delete();
-        return redirect()->route('pelanggan.index')->with('success', 'Pelanggan berhasil dihapus!');
-    }
-
-    // Fungsi format nomor HP menjadi +62
-    private function formatNoHp($no_hp)
-    {
-        if (!$no_hp) return null;
-
-        // Hapus semua spasi atau karakter non-digit kecuali +
-        $no_hp = preg_replace('/[^\d+]/', '', $no_hp);
-
-        // Jika nomor diawali 0, ganti menjadi +62
-        if (substr($no_hp, 0, 1) === '0') {
-            $no_hp = '+62' . substr($no_hp, 1);
-        }
-
-        // Jika nomor diawali +62, biarkan
-        if (substr($no_hp, 0, 3) === '+62') {
-            return $no_hp;
-        }
-
-        // Default: tambahkan +62 jika tidak ada awalan
-        return '+62' . $no_hp;
+        return redirect()->route('pelanggan.index');
     }
 }

@@ -1,13 +1,17 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Produk extends Model
 {
-    use HasFactory;
+    protected $fillable = ['nama_produk', 'stok', 'harga'];
+    protected $visible  = ['nama_produk', 'stok', 'harga'];
 
-    protected $fillable = ['nama_produk', 'stok', 'harga_satuan'];
+    public function transaksis()
+    {
+        return $this->belongsToMany(Transaksi::class, 'detail_transaksi', 'id_produk', 'id_transaksi')
+                    ->withPivot('jumlah', 'sub_total')
+                    ->withTimestamps();
+    }
 }

@@ -2,47 +2,63 @@
 
 @section('content')
 <div class="container">
-    <h1>Edit Produk</h1>
-
-    <div class="card">
-        <div class="card-body">
-            <form action="{{ route('produk.update', $produk->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-
-                <div class="mb-3">
-                    <label for="nama_produk">Nama Produk</label>
-                    <input type="text" name="nama_produk" id="nama_produk"
-                           value="{{ old('nama_produk', $produk->nama_produk) }}"
-                           class="form-control @error('nama_produk') is-invalid @enderror">
-                    @error('nama_produk')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-start">
+                        Edit Produk
+                    </div>
+                    <div class="float-end">
+                        <a href="{{ route('produk.index') }}" class="btn btn-sm btn-outline-primary">Kembali</a>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="stok">Stok</label>
-                    <input type="number" name="stok" id="stok"
-                           value="{{ old('stok', $produk->stok) }}"
-                           class="form-control @error('stok') is-invalid @enderror">
-                    @error('stok')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
+                <div class="card-body">
+                    <form action="{{ route('produk.update', $produk->id) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @method('put')
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label">Nama Produk</label>
+                            <input type="text" class="form-control @error('nama_produk') is-invalid @enderror"
+                                name="nama_produk" value="{{ $produk->nama_produk }}" placeholder="produk Name"
+                                required>
+                            @error('nama_produk')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Harga Produk</label>
+                            <input type="number" class="form-control @error('harga') is-invalid @enderror" name="harga"
+                                value="{{ $produk->harga }}" placeholder="Harga" required>
+                            @error('harga')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
 
-                <div class="mb-3">
-                    <label for="harga_satuan">Harga Satuan</label>
-                    <input type="number" name="harga_satuan" id="harga_satuan"
-                           value="{{ old('harga_satuan', $produk->harga_satuan) }}"
-                           class="form-control @error('harga_satuan') is-invalid @enderror">
-                    @error('harga_satuan')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
+                        <div class="mb-3">
+                            <label class="form-label">Stok Produk</label>
+                            <input type="number" class="form-control @error('stok') is-invalid @enderror" name="stok"
+                                value="{{ $produk->stok }}" placeholder="Stok" required>
+                            @error('stok')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
 
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('produk.index') }}" class="btn btn-secondary">Batal</a>
-            </form>
+
+
+                        <button type="submit" class="btn btn-sm btn-primary">SIMPAN</button>
+                        <button type="reset" class="btn btn-sm btn-warning">RESET</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

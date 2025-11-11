@@ -2,35 +2,26 @@
 
 @section('content')
 <div class="container">
-    <h1>Detail Produk</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>{{ __('Detail Produk') }}</span>
+                    <a href="{{ route('produk.index') }}" class="btn btn-sm btn-outline-primary">Kembali</a>
+                </div>
 
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-bordered">
-                <tr>
-                    <th>Nama Produk</th>
-                    <td>{{ $produk->nama_produk }}</td>
-                </tr>
-                <tr>
-                    <th>Stok</th>
-                    <td>{{ $produk->stok }}</td>
-                </tr>
-                <tr>
-                    <th>Harga Satuan</th>
-                    <td>Rp {{ number_format($produk->harga_satuan, 0, ',', '.') }}</td>
-                </tr>
-                <tr>
-                    <th>Dibuat pada</th>
-                    <td>{{ $produk->created_at->format('d-m-Y H:i') }}</td>
-                </tr>
-                <tr>
-                    <th>Diubah pada</th>
-                    <td>{{ $produk->updated_at->format('d-m-Y H:i') }}</td>
-                </tr>
-            </table>
+                <div class="card-body">
+                    @if ($produk->image)
+                    <img src="{{ Storage::url($produk->image)  }}" class="w-100 rounded mb-3" alt="{{ $produk->nama }}">
+                    @else
+                    <img src="{{ asset('images/pak_habibie.jpg') }}" class="w-100 rounded mb-3" alt="No Image">
+                    @endif
 
-            <a href="{{ route('produk.index') }}" class="btn btn-secondary">Kembali</a>
-            <a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-warning">Edit</a>
+                    <h4 class="fw-bold">{{ $produk->nama }}</h4>
+                    <p class="mt-2 mb-1">Harga: <strong>Rp{{ number_format($produk->harga, 0, ',', '.') }}</strong></p>
+                    <p class="mt-2">{!! $produk->deskripsi !!}</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

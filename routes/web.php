@@ -9,6 +9,7 @@ use App\Models\Hobi;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\TransaksiController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -120,7 +121,14 @@ Route::resource('mahasiswa', App\Http\Controllers\MahasiswaController::class);
 
 Route::resource('pelanggan', PelangganController::class);
 
-Route::resource('produk', ProdukController::class);
-
 // Hapus data
 Route::delete('post/{id}', [PostController::class, 'destroy'])->name('post.delete');
+
+Route::prefix('latihan')->group(function () {
+    Route::get('/transaksi/search', [TransaksiController::class, 'search'])->name('transaksi.search');
+    Route::resource('pelanggan', App\Http\Controllers\PelangganController::class);
+    Route::resource('produk', App\Http\Controllers\ProdukController::class);
+    Route::resource('transaksi', App\Http\Controllers\TransaksiController::class);
+    Route::resource('pembayaran', App\Http\Controllers\PembayaranController::class);
+
+})->middleware('auth');
